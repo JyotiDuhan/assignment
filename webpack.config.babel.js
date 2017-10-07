@@ -25,14 +25,15 @@ import { devStyleConfig, prodStyleConfig } from './build-configs'
 const LAUNCH_COMMAND = process.env.npm_lifecycle_event
 const isProd         = LAUNCH_COMMAND === 'production'
 const PATHS          = {
-  app        : path.join(__dirname, 'app'),
-  build      : path.join(__dirname, 'build'),
-  config     : path.join(__dirname, 'app/config'),
-  redux      : path.join(__dirname, 'app/redux'),
-  utils      : path.join(__dirname, 'app/utils'),
-  styles     : path.join(__dirname, 'app/styles'),
-  containers : path.join(__dirname, 'app/containers'),
-  components : path.join(__dirname, 'app/components')
+  app          : path.join(__dirname, 'app'),
+  build        : path.join(__dirname, 'build'),
+  config       : path.join(__dirname, 'app/config'),
+  redux        : path.join(__dirname, 'app/redux'),
+  utils        : path.join(__dirname, 'app/utils'),
+  styles       : path.join(__dirname, 'app/styles'),
+  containers   : path.join(__dirname, 'app/containers'),
+  components   : path.join(__dirname, 'app/components'),
+  transformers : path.join(__dirname, 'app/transformers')
 }
 
 // Plugins Configuration Starts
@@ -107,12 +108,13 @@ const base = {
   },
   resolve : {
     alias : {
-      $CONFIG     : PATHS.config,
-      $APP        : PATHS.app,
-      $REDUX      : PATHS.redux,
-      $UTILS      : PATHS.utils,
-      $COMPONENTS : PATHS.components,
-      $CONTAINERS : PATHS.containers
+      $CONFIG       : PATHS.config,
+      $APP          : PATHS.app,
+      $REDUX        : PATHS.redux,
+      $UTILS        : PATHS.utils,
+      $COMPONENTS   : PATHS.components,
+      $CONTAINERS   : PATHS.containers,
+      $TRANSFORMERS : PATHS.transformers
     },
     enforceExtension : false,
     extensions       : ['.js', '.jsx', '.css'],

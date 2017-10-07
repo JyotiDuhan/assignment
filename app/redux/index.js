@@ -1,2 +1,2 @@
-export user from './modules/user'
-
+export products from './modules/products'
+export filters from './modules/filters'

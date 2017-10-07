@@ -1,15 +1,14 @@
-import React           from 'react'
-import ReactDOM        from 'react-dom'
-import { Provider }    from 'react-redux'
-import thunk           from 'redux-thunk'
+import React         from 'react'
+import ReactDOM      from 'react-dom'
+import { Provider }  from 'react-redux'
+import thunk         from 'redux-thunk'
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 
-import routes          from '$CONFIG/routes'
-import test            from '$APP/test'
-import * as reducers   from '$REDUX'
+import routes        from '$CONFIG/routes'
+import * as reducers from '$REDUX'
 
 const store = createStore(
-  combineReducers(reducers), 
+  combineReducers(reducers),
   compose(applyMiddleware(thunk), window.devToolsExtension ? window.devToolsExtension() : (func) => func)
 )
 
@@ -18,4 +17,3 @@ ReactDOM.render(
     {routes}
   </Provider>, document.getElementById('root')
 )
-

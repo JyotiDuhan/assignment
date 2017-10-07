@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import * as userActionCreators from '$REDUX/modules/user'
+import * as productsActionCreators from '$REDUX/modules/products'
+import * as filterActionCreators from '$REDUX/modules/filters'
 import { Loading } from '$COMPONENTS'
 
 /**
@@ -17,16 +18,14 @@ class MainContainer extends Component {
    */
   render() {
     const { props } = this
-    const { isFetching, userInfo } = props
+    const { isFetching, productsInfo } = props
 
     return (
       isFetching
         ? <Loading pageName={'Home Page'} />
         : <div>
-          {userInfo 
-            && <div>
-              <p>{`Name : ${userInfo.name}`}</p>
-              <p>{`Email : ${userInfo.email}`}</p>
+          {productsInfo
+            && <div>{'products'}
             </div>
           }
         </div>
@@ -38,10 +37,10 @@ class MainContainer extends Component {
     */
   componentDidMount() {
     const { props } = this
-    const TIMEOUT   = 1000
-    const { isFetching, error, userLogin } = props
+    const { getProducts, getFilters } = props
 
-    userLogin()
+    getProducts()
+      .then(() => getFilters())
   }
 }
 
@@ -51,7 +50,11 @@ class MainContainer extends Component {
  * @return {object}             action creators in object
  */
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(userActionCreators, dispatch)
+  return bindActionCreators({
+    ...productsActionCreators,
+    ...filterActionCreators
+  },
+  dispatch)
 }
 
 
@@ -60,11 +63,11 @@ function mapDispatchToProps(dispatch) {
  * @param  {Object}  state  Full State.
  * @return {Object}         State fregment that is necessary to component.
  */
-function mapStateToProps({ user }) {
-  const { isFetching, error, userInfo } = user
+function mapStateToProps({ products }) {
+  const { isFetching, error, productsInfo } = products
 
   return {
-    userInfo,
+    productsInfo,
     isFetching,
     error
   }
