@@ -30,14 +30,6 @@
     float: right;
   }
 
-  .t-upper{
-    text-transform: uppercase;
-  }
-
-  .t-center{
-    text-align: center;
-  }
-
   .margin-bottom{
     margin-bottom: 20px;
   }
@@ -60,16 +52,5 @@
 
   .bordered{
     border: 1px solid $disabled;
-  }
-
-  .zero{
-    font-size: 0;
-  }
-
-  .btn{
-    text-align: center;
-    background: $theme-1;
-    color: $base-white;
-    cursor: pointer;
   }
 }

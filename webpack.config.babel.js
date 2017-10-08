@@ -13,12 +13,13 @@
  *                                                                     "Y88P"
 */
 
-import webpack           from 'webpack'
 import path              from 'path'
-import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
 import chalk             from 'chalk'
+import webpack           from 'webpack'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 import StyleLintPlugin   from 'stylelint-webpack-plugin'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 import { devStyleConfig, prodStyleConfig } from './build-configs'
 
@@ -64,6 +65,12 @@ const prodPlugin = new webpack.DefinePlugin({
     NODE_ENV : JSON.stringify('production')
   }
 })
+const copyWebpackPluginConfig = new CopyWebpackPlugin([
+  {
+    from : path.join(__dirname, 'assets/images'),
+    to   : path.join(__dirname, 'build/assets/images')
+  }
+])
 // Plugins Configuration Ends
 
 process.env.BABEL_ENV = LAUNCH_COMMAND
@@ -123,7 +130,7 @@ const base = {
   context : PATHS.app
 }
 
-const commonPlugins = [HtmlWebpackPluginConfig, moduleConcatenationPlugin, commonsVendorChunk, styleLintConfig]
+const commonPlugins = [HtmlWebpackPluginConfig, moduleConcatenationPlugin, commonsVendorChunk, styleLintConfig, copyWebpackPluginConfig]
 const devConfig = {
   devtool   : 'inline-source-map', // Stilll need to experiment around this, very slow
   devServer : {
