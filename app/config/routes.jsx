@@ -1,18 +1,17 @@
-import React from 'react'
+import React                            from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import Nav from '$APP/Nav'
-import { MainContainer } from '$CONTAINERS'
-import TestContainer from '$APP/TestContainer'
+import { Header }                       from '$COMPONENTS'
+import { MainContainer, CartContainer, ProductDetailsContainer } from '$CONTAINERS'
 
 const routes = (
   <BrowserRouter>
     <div className='app'>
-      <Nav />
+      <Header />
       <Switch>
         <Route exact={true} path='/' component={MainContainer} />
-        <Route path='/link-2' component={TestContainer} />
-        <Route path='/link-3' component={TestContainer} />
+        <Route path='/cart' component={CartContainer} />
+        <Route path='/products/:prodID' component={ProductDetailsContainer} />
       </Switch>
     </div>
   </BrowserRouter>

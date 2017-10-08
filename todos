@@ -1,3 +1,0 @@
-- Make a generic function generator for reducers action
-- Make generate default action for each reducer:w
-- Test object destructuring for import, check if increases the bundle size.

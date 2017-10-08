@@ -1,3 +1,5 @@
+import intersection from 'lodash/intersection'
+
 /**
  * transformProducts
  * @param  {Array} products [description]
@@ -70,22 +72,30 @@ function doesValueExistInObject(object, value) {
  * @param  {Object} state Store
  * @return {Array}        List of active products
  */
-export function updateProductsByActiveFilters(state) {
-  const { productsMap, byBrand, byPrice, filters } = state
-  const { activeFilters } = filters
-  const isAnyFilterActive = doesValueExistInObject(activeFilters.brand, true) || doesValueExistInObject(activeFilters.price, true)
+export function updateProductsByActiveFilters({ products, activeFilters }) {
+  const isAnyFilterActive = doesValueExistInObject(activeFilters.brands, true) || doesValueExistInObject(activeFilters.price, true)
 
   if (isAnyFilterActive) {
     const active = {}
+    const activeProducts = {}
 
     for (const filter in activeFilters) {
-      if (active[filter]) {
-        active[filter].push(activeFilters[filter])
-      } else {
-        active[filter] = [activeFilters[filter]]
+      const values = Object.keys(activeFilters[filter]).filter((name) => activeFilters[filter][name] === true)
+
+      active[filter] = values
+    }
+
+    for (const filterName in active) {
+      const propName = `by${filterName.charAt(0).toUpperCase()}${filterName.slice(1)}`
+
+      for (const val in active[filterName]) {
+        activeProducts[propName] = activeProducts[propName] || []
+        activeProducts[propName] = activeProducts[propName].concat(products[propName][active[filterName][val]])
       }
     }
+
+    return intersection.apply(null, Object.values(activeProducts))
   }
 
-  return Object.keys(productsMap)
+  return Object.keys(products.productsMap)
 }

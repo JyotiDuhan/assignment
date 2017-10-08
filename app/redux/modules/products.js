@@ -1,8 +1,7 @@
 import { getProductsApi }    from '$UTILS/api'
-import { transformProducts } from '$TRANSFORMERS'
-
 import { byBrands }          from '$REDUX/modules/byBrands'
-import { byPrice }          from '$REDUX/modules/byPrice'
+import { byPrice }           from '$REDUX/modules/byPrice'
+import { transformProducts, updateProductsByActiveFilters } from '$TRANSFORMERS'
 
 const FETCHING_PRODUCTS = 'FETCHING_PRODUCTS'
 const FETCHING_PRODUCTS_FAILURE = 'FETCHING_PRODUCTS_FAILURE'
@@ -50,13 +49,17 @@ function fetchProductsSuccess(productsInfo) {
 
 /**
  * Action Creator: updates Active Products
- * @param  {Array} activeProducts [description]
- * @return {Object}          UPDATE_ACTIVE_PRODUCTS Action
+ * @param  {Array}  activeProducts Active Proudcts, will only be sent by
+ *                                 `getProducts` during inital products fetch.
+ * @param  {Object} activeFilters Hash of active filters, daa will be updated
+ *                                on the basis of this.
+ * @return {Object}                UPDATE_ACTIVE_PRODUCTS Action
  */
-export function updateActiveProducts(activeProducts = []) {
+export function updateActiveProducts(activeProducts = [], activeFilters) {
   return {
     type : UPDATE_ACTIVE_PRODUCTS,
-    activeProducts
+    activeProducts,
+    activeFilters
   }
 }
 
@@ -96,10 +99,11 @@ export function getProducts() {
 
 // Async Action Creators Ends
 const initialState = {
-  isFetching : false,
-  error      : '',
-  byBrands   : {},
-  byPrice    : {}
+  isFetching  : false,
+  error       : '',
+  productsMap : {},
+  byBrands    : {},
+  byPrice     : {}
 }
 
 /**
@@ -127,10 +131,20 @@ export default function products(state = initialState, action) {
       error          : '',
       productsMap    : action.productsInfo
     }),
-    UPDATE_ACTIVE_PRODUCTS : () => ({
-      ...state,
-      activeProducts : action.activeProducts
-    }),
+    UPDATE_ACTIVE_PRODUCTS : () => {
+      const { productsMap } = state
+
+      return {
+        ...state,
+        activeProducts : (action.activeProducts === null)
+          ? updateProductsByActiveFilters({
+            productsMap,
+            products      : state,
+            activeFilters : action.activeFilters
+          })
+          : action.activeProducts
+      }
+    },
     UPDATE_PRODUCTS_BY_FILTERS : () => {
       action.products = Object.values(state.productsMap)
 

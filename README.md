@@ -31,6 +31,7 @@ Base for all assignments
 - #### Installing Dependencies
     ```sh
     npm i
+    npm install -g json-server
     ```
 
 
@@ -41,6 +42,11 @@ First Time setup is completed 👍
 - #### Running Dev server:
     ```sh
         $ npm run start
+    ```
+
+- #### Running Dummy Back-End:
+    ```sh
+        $ json-server db.json
     ```
 <hr/>
 

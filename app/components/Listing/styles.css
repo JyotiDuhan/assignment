@@ -1,0 +1,17 @@
+@import "../../styles/base/_variables";
+
+.prod-unit{
+  width: calc( 25% - 10px );
+  margin: 5px;
+  text-align: center;
+  border: 1px solid $faded;
+  background-color: $pure-white;
+}
+
+:global{
+
+  .prods-cont{
+    width: calc( 100% - 230px );
+    float: right;
+  }
+}

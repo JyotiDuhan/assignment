@@ -23,5 +23,7 @@
       FRAMEWORK - Structure and layout.
 \* ====================================================== */
 
-/* @import "framework/layout"; */
+@import "framework/_layout";
+
+@import "framework/_global";
 

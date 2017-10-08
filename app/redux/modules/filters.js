@@ -1,6 +1,6 @@
 import { getFiltersApi } from '$UTILS/api'
-import { transformFilters, updateProductsByActiveFilters } from '$TRANSFORMERS'
-import { updateProductsByFilters, updateActiveProducts } from './products'
+import { transformFilters } from '$TRANSFORMERS'
+import { updateProductsByFilters } from './products'
 
 const FETCHING_FILTERS = 'FETCHING_FILTERS'
 const FETCHING_FILTERS_SUCCESS = 'FETCHING_FILTERS_SUCCESS'
@@ -126,7 +126,8 @@ export default function filters(state = initialState, action) {
     }),
     'UPDATE_ACTIVE_FILTERS' : () => ({
       ...state,
-      activeFilters : toggleFilters(state.activeFilters, action)
+      wasFiltersChanged : true,
+      activeFilters     : toggleFilters(state.activeFilters, action)
     })
   }
 

@@ -1,0 +1,19 @@
+@import "../../styles/base/_variables";
+
+.header{
+  background-color: $faded;
+  display: inline-block;
+  width: 100%;
+  padding-right: 10px;
+
+  .nav-links{
+    margin-left: 5px;
+
+    a{
+      display: inline-block;
+      padding: 10px;
+      font-size: 16px;
+      text-transform: capitalize;
+    }
+  }
+}

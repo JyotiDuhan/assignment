@@ -1,7 +1,7 @@
 {
   "filters": [
     {
-      "name": "brand",
+      "name": "brands",
       "values": ["NutriWell", "MARIGOLD", "Marigold", "Meiji"]
     },
     {

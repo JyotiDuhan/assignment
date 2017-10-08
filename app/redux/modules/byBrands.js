@@ -9,7 +9,7 @@ import { mapProductsByBrand } from '$TRANSFORMERS'
 export function byBrands(state = {}, action) {
   const options = {
     UPDATE_PRODUCTS_BY_FILTERS : () => {
-      const brands = Object.keys(action.filters.brand)
+      const brands = Object.keys(action.filters.brands)
       const products = action.products
 
       return {
