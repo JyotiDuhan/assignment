@@ -1,2 +1,2 @@
-export user from './modules/user'
+export users from './modules/users'
 

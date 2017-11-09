@@ -70,7 +70,7 @@ const baseRules = {
   "no-implied-eval": 2,
   "no-loop-func": 2,
   "no-magic-numbers": [2, {
-    "ignore": [0, 1, -1, 2, 3],
+    "ignore": [0, 1, -1, 2, 3, 4],
     "ignoreArrayIndexes": true,
     "enforceConst": false
   }],
@@ -239,7 +239,7 @@ const baseRules = {
 	"react/self-closing-comp": 2,
 	"react/sort-comp": 2,
 	"react/jsx-indent": [2, 2],
-	"react/jsx-indent-props": [2, 'tab'],
+	"react/jsx-indent-props": [2, 2],
 	"react/prop-types": [2, { ignore: ['children'] }],
 	"react/sort-comp": 0,
 	"import/prefer-default-export" : 0,
