@@ -5,6 +5,10 @@
     z-index: 999;
   }
 
+  .app{
+    padding: 20px;
+  }
+
   .header{
     width: 100%;
     display: inline-block;

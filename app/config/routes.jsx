@@ -1,8 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import Nav from '$APP/Nav'
-import { MainContainer, UsersContainer } from '$CONTAINERS'
+import { MainContainer } from '$CONTAINERS'
 import TestContainer from '$APP/TestContainer'
 
 const routes = (

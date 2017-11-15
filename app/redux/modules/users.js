@@ -21,7 +21,7 @@ export function addUser() {
  *
  * @returns {Object}     USER_ADDING_FAILURE Action
  */
-function addUserFailure(error = 'Error in User Fetching') {
+export function addUserFailure(error = 'Error in User Fetching') {
   return {
     type : USER_ADDING_FAILURE,
     error
@@ -63,9 +63,9 @@ export function usersInfo(userId, buttonsInfo) {
 
 // Async Action Creators Ends
 const initialState = {
-  isUpdating : false,
-  error      : '',
-  userInfo   : {}
+  isUpdating  : false,
+  error       : '',
+  userInfo    : {}
 }
 
 /**

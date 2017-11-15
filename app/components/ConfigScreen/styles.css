@@ -31,16 +31,31 @@ label{
 
 .red{
   background-color: #FF0000;
+  pointer-events: none;
 }
 
 .green{
   background-color: #474747;
+  pointer-events: none;
 }
 
 .orange{
   background-color: #FFA500;
+  pointer-events: none;
 }
 
 .yellow{
   background-color: #FFFF00;
+  pointer-events: none;
+}
+
+.error{
+  color: #FF5533;
+  padding-left: 10px;
+  margin: 0;
+}
+
+.subtext{
+  margin: 0;
+  font-size: 12px;
 }

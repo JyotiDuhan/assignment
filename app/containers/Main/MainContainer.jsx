@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import * as userActionCreators from '$REDUX/modules/users'
-import { Loading, ConfigScreen, UsersScreen } from '$COMPONENTS'
+import { ConfigScreen, UsersScreen } from '$COMPONENTS'
+
+const colors = ['red', 'green', 'yellow', 'orange']
 
 /**
  * Main Container, this will pass on all the Redux Store,
@@ -23,10 +25,16 @@ class MainContainer extends Component {
     this.editUserConfig = this.editUserConfig.bind(this)
 
     this.state = {
-      btnList       : '',
-      btnActionList : {},
-      userId        : 1,
-      userToEdit    : {}
+      userId          : 1,
+      btnList         : '',
+      userToEdit      : {},
+      isInProcess     : true,
+      isButtonMapped  : true,
+      selectedBtns    : {},
+      colorPattern    : colors.map((elem) => elem),
+      btnActionList   : {},
+      showSubmitError : false,
+      canSelectAction : false,
     }
   }
 
@@ -36,12 +44,13 @@ class MainContainer extends Component {
    */
   editUserConfig(userId){
     this.props.addUser()
-    console.log(this.props.userInfo)
+
     if (this.props.userInfo[userId * 1]){
       this.setState({
         userToEdit : {
           [userId * 1] : this.props.userInfo[userId * 1]
-        }
+        },
+        colorPattern   : colors.map((elem) => elem)
       })
     }
   }
@@ -52,7 +61,8 @@ class MainContainer extends Component {
   addNewUser(){
     this.setState({
       btnList       : '',
-      btnActionList : {}
+      btnActionList : {},
+      colorPattern  : colors.map((elem) => elem)
     })
     this.props.addUser()
   }
@@ -61,13 +71,20 @@ class MainContainer extends Component {
    * [handleButtonClick description]
    * @param  {[type]} event [description]
    */
-  handleButtonClick(event){
-    var btnId = event.currentTarget.id
+  handleButtonClick(event) {
+    if (this.state.isButtonMapped) {
+      const btnId = event.currentTarget.id
+      const selectedBtnIds = this.state.selectedBtns
 
-    console.log(event.currentTarget.id)
-    this.setState({
-      btnList : btnId
-    })
+      selectedBtnIds[btnId] = this.state.colorPattern.pop()
+
+      this.setState({
+        btnList         : btnId,
+        selectedBtns    : selectedBtnIds,
+        isButtonMapped  : false,
+        canSelectAction : true
+      })
+    }
   }
 
   /**
@@ -75,15 +92,36 @@ class MainContainer extends Component {
    * @param  {[type]} event [description]
    */
   handleActionClick(event){
-    var actionId = event.currentTarget.id,
-      temp = this.state.btnActionList
+    if (this.state.canSelectAction) {
+      const actionId = event.currentTarget.id
+      const temp = this.state.btnActionList
+      const selectedActions = {}
 
-    temp[this.state.btnList] = actionId
-    console.log(event.currentTarget.id)
-    this.setState({
-      btnActionList : temp
-    })
-    console.log(this.state.btnActionList)
+
+      temp[this.state.btnList] = actionId
+
+      Object.keys(temp).map((elem) => {
+        if (this.state.selectedBtns.hasOwnProperty(elem)) {
+          selectedActions[temp[elem]] = this.state.selectedBtns[elem]
+        }
+
+        return selectedActions
+      })
+
+      this.setState({
+        btnActionList   : temp,
+        isButtonMapped  : true,
+        canSelectAction : false,
+        selectedActions
+      })
+    }
+
+    if (Object.keys(this.state.btnActionList).length >= 4) {
+      this.setState({
+        isInProcess     : false,
+        showSubmitError : false,
+      })
+    }
   }
 
   /**
@@ -91,17 +129,23 @@ class MainContainer extends Component {
    * @param  {[type]} userId [description]
    */
   updateUser(userId){
-    let storeUserId = this.state.userId
-    const userIdToUpdate = userId || storeUserId
+    if (!this.state.isInProcess) {
+      let storeUserId = this.state.userId
+      const userIdToUpdate = userId || storeUserId
 
-    if (Object.keys(this.state.btnActionList).length >= 4){
-      this.props.usersInfo(userIdToUpdate, this.state.btnActionList)
-      this.setState({
-        userId     : ++storeUserId,
-        userToEdit : {}
-      })
+      if (Object.keys(this.state.btnActionList).length >= 4){
+        this.props.usersInfo(userIdToUpdate, this.state.btnActionList)
+        this.setState({
+          userId          : ++storeUserId,
+          userToEdit      : {},
+          selectedActions : {},
+          selectedBtns    : {}
+        })
+      }
     } else {
-      alert('Please select all 4 button action combos')
+      this.setState({
+        showSubmitError : true
+      })
     }
   }
 
@@ -121,9 +165,16 @@ class MainContainer extends Component {
           handleActionClick={this.handleActionClick}
           updateUser={this.updateUser}
           userToEdit={this.state.userToEdit}
+          selectedBtns={this.state.selectedBtns}
+          selectedActions={this.state.selectedActions}
+          showSubmitError={this.state.showSubmitError}
         />
         : <div>
-          <UsersScreen usersData={userInfo} addUser={this.addNewUser} editUserConfig={this.editUserConfig} />
+          <UsersScreen
+            usersData={userInfo}
+            addUser={this.addNewUser}
+            editUserConfig={this.editUserConfig}
+          />
         </div>
     )
   }
@@ -148,9 +199,9 @@ function mapStateToProps({ users }) {
   const { isUpdating, error, userInfo } = users
 
   return {
+    error,
     userInfo,
-    isUpdating,
-    error
+    isUpdating
   }
 }
 

@@ -8,7 +8,7 @@ import * as styles from './styles.css'
  */
 function loopBtnActions(btnActionCombo) {
   return (
-    Object.keys(btnActionCombo).map((key, index) => (
+    Object.keys(btnActionCombo).map((key) => (
       <div
         key={key}
         className={styles.key}
@@ -29,7 +29,7 @@ function loopBtnActions(btnActionCombo) {
  */
 function loopUsers(usersData, editUserConfig) {
   return (
-    Object.keys(usersData).map((key, index) => (
+    Object.keys(usersData).map((key) => (
       <div key={key}>
         <p key={key}>{`${key}`}</p>
         {loopBtnActions(usersData[key])}

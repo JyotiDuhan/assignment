@@ -4,7 +4,8 @@
   "description": "FE Assignment",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.babel.js --color --progress --hot --inline"
+    "start": "webpack-dev-server --config webpack.config.babel.js --color --progress --hot --inline",
+    "test": "webpack"
   },
   "repository": {
     "type": "git",

@@ -5,11 +5,10 @@ import thunk           from 'redux-thunk'
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 
 import routes          from '$CONFIG/routes'
-import test            from '$APP/test'
 import * as reducers   from '$REDUX'
 
 const store = createStore(
-  combineReducers(reducers), 
+  combineReducers(reducers),
   compose(applyMiddleware(thunk), window.devToolsExtension ? window.devToolsExtension() : (func) => func)
 )
 
