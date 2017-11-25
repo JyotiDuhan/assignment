@@ -8,7 +8,6 @@ import TestContainer from '$APP/TestContainer'
 const routes = (
   <BrowserRouter>
     <div className='app'>
-      <Nav />
       <Switch>
         <Route exact={true} path='/' component={MainContainer} />
         <Route path='/link-2' component={TestContainer} />

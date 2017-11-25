@@ -239,7 +239,7 @@ const baseRules = {
 	"react/self-closing-comp": 2,
 	"react/sort-comp": 2,
 	"react/jsx-indent": [2, 2],
-	"react/jsx-indent-props": [2, 'tab'],
+	"react/jsx-indent-props": [2, 2],
 	"react/prop-types": [2, { ignore: ['children'] }],
 	"react/sort-comp": 0,
 	"import/prefer-default-export" : 0,

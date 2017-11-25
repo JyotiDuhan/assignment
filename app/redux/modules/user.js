@@ -1,23 +1,12 @@
 import { get } from '$UTILS/requestHandler'
 
-const USER_LOGOUT = 'USER_LOGOUT'
-const USER_FETCHING = 'USER_FETCHING'
-const USER_FETCHING_FAILURE = 'USER_FETCHING_FAILURE'
-const USER_FETCHING_SUCCESS = 'USER_FETCHING_SUCCESS'
+const QUESTONS_FETCHING = 'QUESTONS_FETCHING'
+const QUESTONS_FETCHING_FAILURE = 'QUESTONS_FETCHING_FAILURE'
+const QUESTONS_FETCHING_SUCCESS = 'QUESTONS_FETCHING_SUCCESS'
+const UPDATE_WRONG_ANSWERS = 'UPDATE_WRONG_ANSWERS'
+const UPDATE_CORRECT_ANSWERS = 'UPDATE_CORRECT_ANSWERS'
 
-/**
- * Tobe Async Action Creator: Triggers Network Call to logout the user
- *
- * @param {String} email    user email
- *
- * @returns {Promise}       logout call promise
- */
-export function userLogout(email) {
-  return {
-    type : USER_LOGOUT,
-    email
-  }
-}
+const getQuestionsApi = 'https://cdn.rawgit.com/santosh-suresh/39e58e451d724574f3cb/raw/784d83b460d6c0150e338c34713f3a1c2371e20a/assignment.json'
 
 /**
  * Action Creator: Start User Login Process
@@ -27,7 +16,7 @@ export function userLogout(email) {
  */
 function fetchUser() {
   return {
-    type : USER_FETCHING
+    type : QUESTONS_FETCHING
   }
 }
 
@@ -40,7 +29,7 @@ function fetchUser() {
  */
 export function fetchUserFailure(error = 'Error in User Fetching') {
   return {
-    type : USER_FETCHING_FAILURE,
+    type : QUESTONS_FETCHING_FAILURE,
     error
   }
 }
@@ -48,14 +37,38 @@ export function fetchUserFailure(error = 'Error in User Fetching') {
 /**
  * Action Creator: User Login Successful
  *
- * @param {Object} userInfo user data
+ * @param {Object} questionsList user data
  *
  * @returns {Object}        USER_FETCHING_SUCCESS Action
  */
-function fetchUserSuccess(userInfo) {
+function fetchUserSuccess(questionsList) {
   return {
-    type : USER_FETCHING_SUCCESS,
-    userInfo
+    type : QUESTONS_FETCHING_SUCCESS,
+    questionsList
+  }
+}
+
+/**
+ * [updateAnswers description]
+ * @param  {Number} correctAnswers  [description]
+ * @return {[type]}             [description]
+ */
+export function updateCorrectAnswers(correctAnswers) {
+  return {
+    type : UPDATE_CORRECT_ANSWERS,
+    correctAnswers
+  }
+}
+
+/**
+ * [updateAnswers description]
+ * @param  {Number} wrongAnswers  [description]
+ * @return {[type]}             [description]
+ */
+export function updateWrongAnswers(wrongAnswers) {
+  return {
+    type : UPDATE_WRONG_ANSWERS,
+    wrongAnswers
   }
 }
 
@@ -72,23 +85,23 @@ function fetchUserSuccess(userInfo) {
 export function userLogin(email, password) {
   return (dispatch) => {
     dispatch(fetchUser())
-    get('http://localhost:3000/user/')
+    get(getQuestionsApi)
       .then(({ data }) => {
-        const response = data[0]
+        const response = data
 
-        dispatch(fetchUserSuccess({
-          name  : response.name,
-          email : response.email,
-          role  : response.role
-        }))
+        dispatch(fetchUserSuccess(response))
       })
   }
 }
 
 // Async Action Creators Ends
 const initialState = {
-  isFetching : false,
-  error      : ''
+  isFetching        : false,
+  error             : '',
+  currentQuestionNo : 0,
+  correctAnswers    : 0,
+  wrongAnswers      : 0,
+  totalQuestions    : 0
 }
 
 /**
@@ -101,20 +114,31 @@ const initialState = {
  */
 export default function user(state = initialState, action) {
   const options = {
-    USER_FETCHING : () => ({
+    QUESTONS_FETCHING : () => ({
       ...state,
       isFetching : true
     }),
-    USER_FETCHING_FAILURE : () => ({
+    QUESTONS_FETCHING_FAILURE : () => ({
       ...state,
       isFetching : false,
       error      : action.error
     }),
-    USER_FETCHING_SUCCESS : () => ({
+    QUESTONS_FETCHING_SUCCESS : () => ({
       ...state,
-      isFetching : false,
-      error      : '',
-      userInfo   : action.userInfo
+      isFetching      : false,
+      error           : '',
+      questionsList   : action.questionsList,
+      totalQuestions  : action.questionsList.length
+    }),
+    UPDATE_CORRECT_ANSWERS : () => ({
+      ...state,
+      correctAnswers    : action.correctAnswers,
+      currentQuestionNo : state.currentQuestionNo + 1
+    }),
+    UPDATE_WRONG_ANSWERS : () => ({
+      ...state,
+      wrongAnswers      : action.wrongAnswers,
+      currentQuestionNo : state.currentQuestionNo + 1
     })
   }
 

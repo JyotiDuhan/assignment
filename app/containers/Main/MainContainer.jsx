@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import * as userActionCreators from '$REDUX/modules/user'
-import { Loading } from '$COMPONENTS'
+import { Loading, HomeComponent } from '$COMPONENTS'
 
 /**
  * Main Container, this will pass on all the Redux Store,
@@ -11,25 +11,65 @@ import { Loading } from '$COMPONENTS'
  */
 class MainContainer extends Component {
   /**
+   * [constructor description]
+   * @param  {[type]} props [description]
+   */
+  constructor(props){
+    super(props)
+    this.handleOptionClick = this.handleOptionClick.bind(this)
+    this.state = {
+      finalPage : false
+    }
+  }
+
+  /**
+   * [handleOptionClick description]
+   * @param  {[type]} event [description]
+   */
+  handleOptionClick(event){
+    console.log(event)
+    const currentQuestion = this.props.questionsList[this.props.currentQuestionNo]
+    const isCorrect = currentQuestion.answer === (event.currentTarget.id * 1)
+
+    if (isCorrect) {
+      let value = this.props.correctAnswers
+
+      this.props.updateCorrectAnswers(++value)
+    } else {
+      let value = this.props.wrongAnswers
+
+      this.props.updateWrongAnswers(++value)
+    }
+
+    if ((this.props.currentQuestionNo + 1) === this.props.totalQuestions) {
+      this.setState({
+        finalPage : true
+      })
+    }
+  }
+
+  /**
    * React Lifecycle Method: Renders the data
    *
    * @return {DOM} Main container DOM.
    */
   render() {
     const { props } = this
-    const { isFetching, userInfo } = props
+    const { isFetching, questionsList, currentQuestionNo } = props
+    const currentQuestion = questionsList && questionsList[currentQuestionNo]
 
     return (
-      isFetching
+      isFetching || !questionsList
         ? <Loading pageName={'Home Page'} />
-        : <div>
-          {userInfo 
-            && <div>
-              <p>{`Name : ${userInfo.name}`}</p>
-              <p>{`Email : ${userInfo.email}`}</p>
-            </div>
-          }
-        </div>
+        :
+        <HomeComponent
+          currentQuestion={currentQuestion}
+          currentQuestionNo={currentQuestionNo}
+          handleOptionClick={this.handleOptionClick}
+          isFinalPage={this.state.finalPage}
+          correctAnswers={this.props.correctAnswers}
+          wrongAnswers={this.props.wrongAnswers}
+        />
     )
   }
 
@@ -61,10 +101,14 @@ function mapDispatchToProps(dispatch) {
  * @return {Object}         State fregment that is necessary to component.
  */
 function mapStateToProps({ user }) {
-  const { isFetching, error, userInfo } = user
+  const { isFetching, error, questionsList, currentQuestionNo, wrongAnswers, correctAnswers, totalQuestions } = user
 
   return {
-    userInfo,
+    questionsList,
+    currentQuestionNo,
+    correctAnswers,
+    wrongAnswers,
+    totalQuestions,
     isFetching,
     error
   }
